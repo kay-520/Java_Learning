@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+#
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#      - id: host_route
+#        uri: http://localhost:8081
+#        predicates:
+#        - Path=/a/**
+#        filters:
+#        - StripPrefix=1
+#      - id: host_route
+#        uri: http://localhost:8082
+#        predicates:
+#        - Path=/b/**
+#        filters:
+#        - StripPrefix=1
