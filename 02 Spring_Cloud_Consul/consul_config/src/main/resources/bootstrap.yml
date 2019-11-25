@@ -1,0 +1,43 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: consul-config
+  cloud:
+    consul:
+      host: 192.168.75.128
+      port: 8500
+      #enabled将此值设置为“false”禁用Consul配置
+      config:
+        enabled: true   #默认是true --
+        format: KEY_VALUE  #YAML    # 表示consul上面文件的格式 有四种 YAML PROPERTIES KEY_VALUE FILES
+        #data-key: configuration    #表示consul上面的KEY值(或者说文件的名字) 默认是data
+        data-key: data    #表示consul上面的KEY值(或者说文件的名字) 默认是data
+        prefix: config  #指定consul配置的文件夹前缀为config
+        #defaultContext设置所有应用程序使用的文件夹名称
+        #profileSeparator 指定consul配置的配置文件父路径
+        profileSeparator: ${spring.application.name}
+        fail-fast: false #表示如果没有发现配置，是否抛出异常，true为是，false为否，当为false时，consul会打印warn级别的日志信息
+        # watch选项为配置监视功能，主要监视配置的改变
+        watch:
+          enabled: true
+          delay: 10000
+          wait-time: 30
+        name: ${spring.application.name}
+      discovery:
+        # 启用服务发现
+        enabled: true
+        # 启用服务注册
+        register: true
+        # 服务停止时取消注册
+        deregister: true
+        # 表示注册时使用IP而不是hostname
+        prefer-ip-address: true
+        # 执行监控检查的频率
+        health-check-interval: 30s
+        # 设置健康检查失败多长时间后，取消注册
+        health-check-critical-timeout: 30s
+        # 健康检查的路径
+        health-check-path: /actuator/health
+        # 服务注册标识，格式为：应用名称+服务器IP+端口
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
