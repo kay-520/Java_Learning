@@ -10,7 +10,7 @@ spring:
       #enabled将此值设置为“false”禁用Consul配置
       config:
         enabled: true   #默认是true --
-        format: KEY_VALUE  #YAML    # 表示consul上面文件的格式 有四种 YAML PROPERTIES KEY_VALUE FILES
+        format: YAML  #YAML    # 表示consul上面文件的格式 有四种 YAML PROPERTIES KEY_VALUE FILES
         #data-key: configuration    #表示consul上面的KEY值(或者说文件的名字) 默认是data
         data-key: data    #表示consul上面的KEY值(或者说文件的名字) 默认是data
         prefix: config  #指定consul配置的文件夹前缀为config
