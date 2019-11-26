@@ -1,8 +1,8 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   application:
-    name: consul-provider
+    name: consul-provider2
   cloud:
     consul:
       host: 192.168.75.128

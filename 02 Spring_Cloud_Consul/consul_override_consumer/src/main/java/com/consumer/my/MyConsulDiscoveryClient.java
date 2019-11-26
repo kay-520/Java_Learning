@@ -23,7 +23,7 @@ import static org.springframework.cloud.consul.discovery.ConsulServerUtils.getMe
 /**
  * @author: create by wangmh
  * @name: MyConsulDiscoveryClient.java
- * @description: 自定义ConsulDiscoveryClient
+ * @description: 自定义ConsulDiscoveryClient  //参照ConsulDiscoveryClient.class
  * @date:2019/11/26
  **/
 @Component

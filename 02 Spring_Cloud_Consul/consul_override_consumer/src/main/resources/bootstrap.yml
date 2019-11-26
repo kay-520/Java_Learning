@@ -11,3 +11,13 @@ spring:
         server-list-query-tags:     # 注意 server-list-query-tags 是一个 map
           consul-provider: test1     # 在调用consul-provider 服务时, 使用 tag1 对应的实例
         health-check-path: /actuator/health
+      ribbon:
+        enabled: false   # 此处配置很重要,为 true 时走原有逻辑, 为 false 时走重写逻辑
+ribbon:
+  client:
+    name: ${spring.application.name}
+
+feign:
+  hystrix:
+    enabled: true
+
