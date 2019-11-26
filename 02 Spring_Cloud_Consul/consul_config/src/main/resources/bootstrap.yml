@@ -41,3 +41,14 @@ spring:
         health-check-path: /actuator/health
         # 服务注册标识，格式为：应用名称+服务器IP+端口
         instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+        # 指定服务的标签, 用逗号隔开（分组）
+        tags: test1,test2
+        # 假装部署在docker中，指定宿主机IP
+        ip-address: 192.168.75.1
+        # 假装部署在docker中，指定宿主机端口
+        port: ${server.port}
+        # 假如你的服务提供的是https服务时，需要配置该值为https
+        scheme: http
+        ## 注意server-list-query-tags是一个map，在调用consul-provider服务时，使用test3对应的实例
+#        server-list-query-tags:
+#          consul-provider: test3

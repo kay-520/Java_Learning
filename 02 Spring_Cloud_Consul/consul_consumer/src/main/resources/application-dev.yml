@@ -17,6 +17,9 @@ spring:
         health-check-path: /actuator/health
         instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} # 应用名称+服务器IP+端口
         service-name: ${spring.application.name}
+        ## 注意server-list-query-tags是一个map，在调用consul-provider服务时，使用test3对应的实例
+        server-list-query-tags:
+          consul-provider: test1
 feign:
   hystrix:
     enabled: true

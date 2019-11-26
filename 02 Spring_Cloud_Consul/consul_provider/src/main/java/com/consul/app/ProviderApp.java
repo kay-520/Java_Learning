@@ -29,6 +29,6 @@ public class ProviderApp {
 
     @GetMapping("/sayHello")
     public String sayHello() {
-        return "hello";
+        return "hello2";
     }
 }

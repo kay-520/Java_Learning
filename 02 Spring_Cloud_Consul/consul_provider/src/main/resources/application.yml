@@ -18,3 +18,5 @@ spring:
         instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} # 应用名称+服务器IP+端口
         service-name: ${spring.application.name}
         ## 具体配置含义 见consul——config
+        # server-list-query-tags调用多个实例时，使用
+        tags: test1,test3

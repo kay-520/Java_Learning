@@ -1,7 +1,11 @@
+## config/consul-config/data
+
 #foo:
 #  bar:
-#    name: 哈哈哈哈本地
+#    name: 哈哈哈哈远程
 #stu:
-#  name: wangminghuan本地
+#  name: wangminghuan远程
 #  age: 18
 #  sex: 1
+
+

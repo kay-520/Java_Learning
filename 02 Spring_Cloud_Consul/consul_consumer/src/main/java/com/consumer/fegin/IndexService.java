@@ -18,4 +18,5 @@ public interface IndexService {
 
     @GetMapping("/sayHello")
     String sayHello();
+
 }
