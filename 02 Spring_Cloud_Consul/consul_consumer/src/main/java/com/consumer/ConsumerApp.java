@@ -77,7 +77,7 @@ public class ConsumerApp {
     /**
      * 获取服务信息
      */
-    @RequestMapping("/services")
+    @RequestMapping("/services") //getService接口
     public Object services() {
         return discoveryClient.getInstances("consul-provider");
     }
