@@ -47,8 +47,8 @@ public class ConsumerApp {
         return indexService.sayHello();
     }
 
-    //url和配置文件中的spring.cloud.consul.discovery.health-check-path值相同
-    //必须存在，否者consul服务端 check保存，会导致Fegin调用失败
+    //url和配置文件中的spring.cloud.consul.discovery.health-check-path值相同 (自定义安全检查)
+    //如果自定义了健康检查，就必须定义该接口，否者consul服务端 check保存，会导致Fegin调用失败
     @GetMapping("/actuator/health")
     public String health() {
         return "success";
