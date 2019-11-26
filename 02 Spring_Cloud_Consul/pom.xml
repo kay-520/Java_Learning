@@ -12,6 +12,7 @@
         <module>consul_provider</module>
         <module>consul_consumer</module>
         <module>consul_config</module>
+        <module>consul_override_consumer</module>
     </modules>
 
     <parent>

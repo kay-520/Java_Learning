@@ -19,4 +19,4 @@ spring:
         service-name: ${spring.application.name}
         ## 具体配置含义 见consul——config
         # server-list-query-tags调用多个实例时，使用
-        tags: test1,test3
+        tags: test1,test2
