@@ -1,0 +1,22 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: consul-provider2
+  cloud:
+    consul:
+      host: 192.168.75.128
+      port: 8500
+      discovery:
+        enabled: true
+        register: true
+        deregister: true
+        prefer-ip-address: true
+        health-check-interval: 10s
+        health-check-critical-timeout: 30s
+        health-check-path: /actuator/health
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} # 应用名称+服务器IP+端口
+        service-name: ${spring.application.name}
+        ## 具体配置含义 见consul——config
+        # server-list-query-tags调用多个实例时，使用
+        tags: test1,test2
