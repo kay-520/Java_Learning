@@ -2,3 +2,4 @@
 
 2.SpringBoot整合RabbitMQ
 
+3.死信队列

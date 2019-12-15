@@ -1,0 +1,27 @@
+spring:
+  rabbitmq:
+    ####连接地址
+    host: 192.168.75.130
+    ####端口号
+    port: 5672
+    ####账号
+    username: admin
+    ####密码
+    password: admin
+    ### 地址
+    virtual-host: /wmh
+server:
+  port: 8080
+
+###模拟演示死信队列
+#死信队列
+dlx:
+  exchange: dlx_exchange
+  queue: order_dlx_queue
+  routingKey: dlx
+#订单队列
+order:
+  exchange: order_exchange
+  queue: order_queue
+  routingKey: order
+
