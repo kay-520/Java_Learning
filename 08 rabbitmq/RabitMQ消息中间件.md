@@ -341,3 +341,384 @@ public class SmsConsumer {
 ```
 
 邮件消费者：
+
+```java
+public class MailConsumer {
+    /**
+     * 定义短信队列
+     */
+    private static final String QUEUE_NAME = "consumerFanout_email";
+    /**
+     * 定义交换机的名称
+     */
+    private static final String EXCHANGE_NAME = "fanout_exchange";
+
+    public static void main(String[] args) throws IOException, TimeoutException {
+        System.out.println("邮件消费者...");
+        //1.创建连接
+        Connection connection = RabitMQConnection.getConnection();
+        //2.设置通道
+        final Channel channel = connection.createChannel();
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "");
+        DefaultConsumer defaultConsumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String msg = new String(body, "UTF-8");
+                System.out.println("邮件消费消息msg:" + msg);
+            }
+        };
+        //3.监听队列 true为自动获取 false手动应答
+        channel.basicConsume(QUEUE_NAME, true, defaultConsumer);
+    }
+}
+```
+
+***RabbitMQ交换机类型***
+
+Direct exchange（直连交换机）
+
+Fanout exchange（扇型交换机）
+
+Topic exchange（主题交换机）
+
+Headers exchange（头交换机）
+
+##### 4.Direct路由模式
+
+> 当交换机类型为Direct类型时，根据队列绑定的路由键将消息转发到具体的队列。
+>
+> ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191215162258810.png)
+
+生产者：
+
+```java
+public class ProducerDirect {
+    /**
+     * 定义交换机的名称
+     */
+    private static final String EXCHANGE_NAME = "direct_exchange";
+
+    public static void main(String[] args) throws IOException, TimeoutException {
+        System.out.println("生产者启动成功..");
+        Connection connection = RabitMQConnection.getConnection();
+        Channel channel = connection.createChannel();
+        //通道关联交换机
+        channel.exchangeDeclare(EXCHANGE_NAME, "direct", true);
+        String msg = "生产者发送消息内容" + System.currentTimeMillis();
+        channel.basicPublish(EXCHANGE_NAME, "sms", null, msg.getBytes());
+        channel.close();
+        connection.close();
+    }
+
+}
+```
+
+邮件消费者：
+
+```java
+public class EmailConsumer {
+    /***
+     * 定义邮件队列
+     */
+    private static final String QUEUE_NAME = "direct_email";
+    /**
+     * 定义交换机的名称
+     */
+    private static final String EXCHANGE_NAME = "direct_exchange";
+
+    public static void main(String[] args) throws IOException, TimeoutException {
+        System.out.println("邮件消费者...");
+        // 创建我们的连接
+        Connection connection = RabitMQConnection.getConnection();
+        // 创建我们通道
+        final Channel channel = connection.createChannel();
+        // 关联队列消费者关联队列
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "email"); //参数3为队列所绑定的路由键
+        DefaultConsumer defaultConsumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String msg = new String(body, "UTF-8");
+                System.out.println("邮件消费者获取消息:" + msg);
+            }
+        };
+        // 开始监听消息 自动签收
+        channel.basicConsume(QUEUE_NAME, true, defaultConsumer);
+
+    }
+}
+```
+
+短信消费者：
+
+```java
+public class SmsConsumer {
+    /**
+     * 定义短信队列
+     */
+    private static final String QUEUE_NAME = "direct_sms";
+    /**
+     * 定义交换机的名称
+     */
+    private static final String EXCHANGE_NAME = "direct_exchange";
+
+    public static void main(String[] args) throws IOException, TimeoutException {
+        System.out.println("短信消费者...");
+        // 创建我们的连接
+        Connection connection = RabitMQConnection.getConnection();
+        // 创建我们通道
+        final Channel channel = connection.createChannel();
+        // 关联队列消费者关联队列
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "sms");
+        DefaultConsumer defaultConsumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String msg = new String(body, "UTF-8");
+                System.out.println("短信消费者获取消息:" + msg);
+            }
+        };
+        // 开始监听消息 自动签收
+        channel.basicConsume(QUEUE_NAME, true, defaultConsumer);
+
+    }
+}
+```
+
+##### 5.Topic主题模式
+
+> 当交换机类型为topic类型时，根据队列绑定的路由键模糊转发到具体的队列中存放
+>
+> #表示支持匹配多个词
+>
+> *表示只能匹配一个词
+>
+> ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191215165731280.png)
+
+生产者：
+
+```java
+public class ProducerTopic {
+    private static final String EXCHANGE_NAME = "topic_exchange";
+    public static void main(String[] args) throws IOException, TimeoutException {
+        System.out.println("生产者启动成功..");
+        Connection connection = RabitMQConnection.getConnection();
+        Channel channel = connection.createChannel();
+        //通道关联交换机
+        channel.exchangeDeclare(EXCHANGE_NAME, "topic", true);
+        String msg = "生产者发送消息内容" + System.currentTimeMillis();
+        channel.basicPublish(EXCHANGE_NAME, "wmh.email", null, msg.getBytes());//参数2为路由键
+        channel.close();
+        connection.close();
+    }
+}
+```
+
+消费者：
+
+```java
+public class EmailConsumer {
+    private static final String QUEUE_NAME = "topic_email";
+    private static final String EXCHANGE_NAME = "topic_exchange";
+    public static void main(String[] args) throws IOException, TimeoutException {
+        System.out.println("邮件消费者...");
+        Connection connection = RabitMQConnection.getConnection();
+        final Channel channel = connection.createChannel();
+        // 关联队列消费者关联队列
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "wmh.*");//参数3为队列所绑定的路由键
+        DefaultConsumer defaultConsumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String msg = new String(body, "UTF-8");
+                System.out.println("邮件消费者获取消息:" + msg);
+            }
+        };
+        // 开始监听消息 自动签收
+        channel.basicConsume(QUEUE_NAME, true, defaultConsumer);
+    }
+}
+```
+
+#### 五、SpringBoot整合
+
+Maven依赖
+
+```xml
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.0.RELEASE</version>
+</parent>
+<dependencies>
+
+    <!-- springboot-web组件 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <!-- 添加springboot对amqp的支持 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <!--fastjson -->
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>fastjson</artifactId>
+        <version>1.2.49</version>
+    </dependency>
+</dependencies>
+```
+
+application.yml
+
+```yaml
+spring:
+  rabbitmq:
+    ####连接地址
+    host: 192.168.75.130
+    ####端口号
+    port: 5672
+    ####账号
+    username: admin
+    ####密码
+    password: admin
+    ### 地址
+    virtual-host: /wmh
+```
+
+配置类：
+
+```java
+public class RabbitMQConfig {
+    /**
+     * 定义交换机
+     */
+    private String EXCHANGE_SPRINGBOOT_NAME = "springboot_exchange";
+
+
+    /**
+     * 短信队列
+     */
+    private String FANOUT_SMS_QUEUE = "fanout_sms_queue";
+
+    /**
+     * 邮件队列
+     */
+    private String FANOUT_EMAIL_QUEUE = "fanout_email_queue";
+
+    /***
+     * 创建短信队列
+     * @return
+     */
+    @Bean
+    public Queue smsQueue() {
+        return new Queue(FANOUT_SMS_QUEUE);
+    }
+
+    /***
+     * 创建邮件队列
+     * @return
+     */
+    @Bean
+    public Queue emailQueue(){
+        return new Queue(FANOUT_EMAIL_QUEUE);
+    }
+
+
+    /***
+     * 创建交换机
+     * @return
+     */
+    @Bean
+    public FanoutExchange fanoutExchange(){
+        return new FanoutExchange(EXCHANGE_SPRINGBOOT_NAME);
+    }
+
+    /***
+     * 定义短信队列绑定交换机
+     * @param smsQueue
+     * @param fanoutExchange
+     * @return
+     */
+    @Bean
+    public Binding smsBindingExchange(Queue smsQueue,FanoutExchange fanoutExchange){
+        return BindingBuilder.bind(smsQueue).to(fanoutExchange);
+    }
+
+    /***
+     * 定义邮件队列绑定交换机
+     * @param emailQueue
+     * @param fanoutExchange
+     * @return
+     */
+    @Bean
+    public Binding emailBindingExchange(Queue emailQueue,FanoutExchange fanoutExchange){
+        return BindingBuilder.bind(emailQueue).to(fanoutExchange);
+    }
+}
+```
+
+Controller层：（消费生产）
+
+```java
+@RestController
+public class FanoutProducerController {
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    /***
+     * 向rabbitmq中发送消息（发布订阅模式）
+     * @param msg
+     * @return
+     */
+    @RequestMapping("/sendMsg")
+    public String sendMsg(String msg) {
+        //参数1 交换机名称 、参数2路由key  参数3 消息
+        amqpTemplate.convertAndSend("springboot_exchange", "", msg);
+        return "success";
+    }
+
+    @RequestMapping("/sendMsg2")
+    public String sendMsg(Integer msg) {
+        amqpTemplate.convertAndSend("springboot_exchange", "", msg);
+        return "success";
+    }
+
+
+    /***
+     * 手动消费短信消息
+     * @return
+     */
+    @RequestMapping("/receiveMsg2")
+    public String receiveMsg() {
+        String fanout_sms_queue = amqpTemplate.receiveAndConvert("fanout_sms_queue").toString();
+        return "接收到消息："+fanout_sms_queue;
+    }
+}
+```
+
+消息监听，有消息时则会进行接收并处理
+
+```java
+@Component
+@RabbitListener(queues = {"fanout_email_queue"})//队列中有消息时则会进行接收并处理
+public class FanoutEmailConsumer {
+
+    //@RabbitListener 标注在类上面表示当有收到消息的时候，
+    // 就交给 @RabbitHandler 的方法处理，具体使用哪个方法处理，
+    // 根据 MessageConverter 转换后的参数类型
+    @RabbitHandler
+    public void process(String msg) {
+        System.out.println("邮件消费者消息String类型msg:" + msg);
+    }
+
+    @RabbitHandler
+    public void process2(Integer msg) {
+        System.out.println("邮件消费者消息Integer类型msg:" + msg);
+    }
+}
+```
+
