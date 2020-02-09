@@ -6,5 +6,6 @@ spring:
       transport:
         port: 8719
         dashboard: 192.168.75.137:8718
+      eager: true
   application:
     name: Sentinel-02
