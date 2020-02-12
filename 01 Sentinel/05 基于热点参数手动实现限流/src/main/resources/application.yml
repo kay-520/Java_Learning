@@ -1,0 +1,14 @@
+server:
+  port: 8081
+spring:
+  cloud:
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 192.168.75.137:8718
+#        dashboard: 127.0.0.1:8718
+      eager: true
+      log:
+        dir: D:\Code\study\Java_Learning\01 Sentinel\05 基于热点参数手动实现限流\logs\
+  application:
+    name: Sentinel-04
