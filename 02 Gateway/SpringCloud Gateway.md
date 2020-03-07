@@ -155,9 +155,43 @@ CREATE TABLE `mayikt_gateway` (
     </dependencies>
 ```
 
-具体代码：[GitHub]( [https://github.com/kay-520/Java_Learning/tree/SpringCloudAlibaba/02%20Gateway/02%20%E5%8A%A8%E6%80%81%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E7%BD%91%E5%85%B3](https://github.com/kay-520/Java_Learning/tree/SpringCloudAlibaba/02 Gateway/02 动态请求参数网关) )
+具体代码： [https://github.com/kay-520/Java_Learning/tree/SpringCloudAlibaba/02%20Gateway](https://github.com/kay-520/Java_Learning/tree/SpringCloudAlibaba/02 Gateway) 
 
-#### 七、GateWay解决跨域的问题
+#### 七、路由策略
+
+详细参考：
+
+https://cloud.spring.io/spring-cloud-gateway/reference/html/#gatewayfilter-factories
+
+#### 八、源码分析
+
+1.客户端向网关发送Http请求，会到达DispatcherHandler接受请求，匹配到
+
+RoutePredicateHandlerMapping。
+
+2.根据RoutePredicateHandlerMapping匹配到具体的路由策略。
+
+3.FilteringWebHandler获取的路由的GatewayFilter数组，创建 GatewayFilterChain 处理过滤请求
+
+4.执行我们的代理业务逻辑访问。
+
+​         ![img](img/1.jpg)  
+
+
+
+
+
+常用配置类说明：
+
+1. GatewayClassPathWarningAutoConfiguration 检查是否有正确的配置webflux
+
+2. GatewayAutoConfiguration 核心配置类
+
+3. GatewayLoadBalancerClientAutoConfiguration 负载均衡策略处理
+
+4. GatewayRedisAutoConfiguration Redis+lua整合限流
+
+#### 九、GateWay解决跨域的问题
 
 ```java
 @Component
