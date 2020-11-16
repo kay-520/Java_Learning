@@ -11,19 +11,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class BusinessController {
+public class IndexController {
 
 
     @Autowired
     private TokenService tokenService;
 
+    /***
+     * 1.创建Token，并获取
+     * @return
+     */
     @GetMapping("/api/token")
-    public Object getToken(HttpServletRequest request, HttpServletResponse response) {
+    public Object getToken() {
         String token = tokenService.createToken();
         return ResponseUtil.ok(token);
     }
 
 
+    /***
+     * 2.接口幂等性测试
+     * @return
+     */
     @AutoIdempotent
     @GetMapping("/api/Idempotence")
     public Object testIdempotence() {
