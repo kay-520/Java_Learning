@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  datasource:
+#    url: jdbc:mysql://xxxxxx:3306/Test?useUnicode=true&characterEncoding=utf8
+#    username: root
+#    password: xxxxxxx
+#    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: localhost
+    password:
+    database: 0
+    jedis:
+      pool:
+        max-active: 10
+        max-idle: 10
+        max-wait: 5
+        min-idle: 10
+
