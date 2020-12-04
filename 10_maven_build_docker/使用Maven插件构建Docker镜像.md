@@ -37,7 +37,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
 #### 让Docker支持http上传镜像
 
 ```shell
-echo '{ "insecure-registries":["192.168.3.101:5000"] }' > /etc/docker/daemon.jsonCopy to clipboardErrorCopied
+echo '{ "insecure-registries":["192.168.3.101:5000"] }' > /etc/docker/daemon.json
 ```
 
 #### 修改配置后需要使用如下命令使配置生效
@@ -50,7 +50,7 @@ systemctl daemon-reload
 
 ```shell
 systemctl stop docker
-systemctl start dockerCopy to clipboardErrorCopied
+systemctl start docker
 ```
 
 #### 开启防火墙的Docker构建端口
