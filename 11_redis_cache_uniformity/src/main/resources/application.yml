@@ -1,0 +1,12 @@
+server:
+  port: 8081
+spring:
+  redis:
+    host: 10.211.55.5
+    port: 6379
+    database: 0
+  datasource:
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.211.55.5:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
