@@ -1,5 +1,3 @@
-## Mysql与缓存数据一致性问题
-
 问题；如果数据库数据发生了变化，如何将变化的数据同步给redis？
 
 > 1.直接删除redis缓存，见代码
@@ -9,6 +7,7 @@
 > 3.基于canal订阅binlog二进制文件，通过mq实现异步同步
 
 #### 基于canal订阅binlog同步
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20201221113536667.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MDgyNjM0OQ==,size_16,color_FFFFFF,t_70#pic_center)
 
 原理：
 
@@ -47,11 +46,14 @@ docker run -p 11111:11111 --name canal -id canal/canal-server
 docker exec -it canal /bin/bash
 # 修改canal.id=2  不能与之前的mysql配置id相同
 vi /home/admin/canal-server/conf/canal.properties
+```
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20201221113552906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MDgyNjM0OQ==,size_16,color_FFFFFF,t_70#pic_center)
+
+```shell
 #修改mysql主节点地址
 vi /home/admin/canal-server/conf/example/instance.properties
 ```
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20201221113602249.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MDgyNjM0OQ==,size_16,color_FFFFFF,t_70#pic_center)
 
 3.测试代码
-
-
-
+[github地址](https://github.com/kay-520/Java_Learning/tree/master/11_redis_cache_uniformity)
