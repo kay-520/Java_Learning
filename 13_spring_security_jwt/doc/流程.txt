@@ -1,0 +1,6 @@
+登陆：
+1.登陆/auth/login，先走MemberUserDetailsService->loadUserByUsername，验证用户并查询对应权限
+2.登陆成功走JWTLoginFilter->successfulAuthentication方法，在请求头中返回token
+
+请求接口：
+1.请求接口，走JWTValidationFilter->doFilterInternal过滤请求验证token以及权限
