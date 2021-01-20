@@ -1,0 +1,14 @@
+1.用户登陆，携带client_id去认证中心获取授权码
+http://localhost:8080/oauth/authorize?client_id=test_appId&response_type=code
+
+2.接着携带授权码、回调地址、作用域、client_id、client_secret去认证中心换取accessToken、有效期、刷新token等信息
+post http://localhost:8080/oauth/token?code=ld6Nd4&grant_type=authorization_code&redirect_uri=http://karma520.com/callback&scope=all&client_id=test_appId&client_secret=test_appkey
+
+3.用户请求资源，先去认证中心，验证accesstoken是否有效，并进行授权，有效则直接请求url。反之，无权限！
+http://localhost:8081/getMember 请求头中添加 Authorization=bearer ${access_token}
+底层先去认证中心（如下），验证accesstoken是否有效，并进行授权。
+http://localhost:8080/oauth/check_token?token=${accesstoken}
+
+其他：
+1.刷新token
+post http://localhost:8080/oauth/token?grant_type=refresh_token&refresh_token=${refresh_token}&client_id=test_appId&client_secret=test_appkey

@@ -1,0 +1,6 @@
+auth:
+  appid: test_appId
+  appsecret: test_appkey
+server:
+  port: 8081
+
