@@ -1,0 +1,11 @@
+server:
+  port: 8080
+#spring:
+#  cloud:
+#    sentinel:
+#      transport:
+#        port: 8719
+#        dashboard: 192.168.75.137:8718
+Spring:
+  application:
+    name: Sentinel-01
