@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 192.168.75.137:8718
+      eager: true
+      datasource:
+        ds:
+          nacos:
+            ### nacos连接地址
+            server-addr: 192.168.75.137:8848
+            ## nacos连接的分组
+            group-id: DEFAULT_GROUP
+            ###路由存储规则
+            rule-type: flow
+            ### 读取配置文件的 data-id
+            data-id: Sentinel-03
+            ###  读取培训文件类型为json
+            data-type: json
+      log:
+        dir: D:\Code\study\Java_Learning\01 Sentinel\03 基于Nacos实现数据持久化\logs\
+  application:
+    name: Sentinel-03

@@ -1,6 +1,0 @@
-## 通过yaml文件配置url匹配规则
-shiro:
-  filterChainDefinitionMap:
-    /logout: logout
-    /**: authc
-    /index2: anon
